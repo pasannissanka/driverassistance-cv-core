@@ -6,8 +6,8 @@
 #include "yolov4.h"
 #include "tracker.h"
 
-const std::string VIDEO_PATH = "/home/pasan/Projects/HCI/ncnn/cmake_test/chunks/";
-const std::string MODEL_PATH = "/home/pasan/Projects/HCI/ncnn/cmake_test/models/";
+const std::string VIDEO_PATH = "../inputs/";
+const std::string MODEL_PATH = "../models/";
 
 cv::VideoCapture cap;
 int g_slider_position = 0;
