@@ -5,21 +5,29 @@ include(CTest)
 enable_testing()
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 include(CPack)
 
 find_package( OpenCV REQUIRED )
-
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
-include_directories(ncnn/include)
+find_package(Eigen3 REQUIRED)
+link_directories(${Eigen_INCLUDE_DIRS})
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(include/ncnn/include)
+
 add_library( ncnn STATIC IMPORTED )
 set_target_properties( # Specifies the target library.
         ncnn
         # Specifies the parameter you want to define.
         PROPERTIES IMPORTED_LOCATION
         # Provides the path to the library you want to import.
-        ${CMAKE_SOURCE_DIR}/ncnn/lib/libncnn.a )
+        ${CMAKE_SOURCE_DIR}/include/ncnn/lib/libncnn.a )
 
-add_executable(yolo main.cpp yolov4.cpp)
-target_link_libraries( yolo ${OpenCV_LIBS} ncnn -fopenmp)
+file(GLOB SOURCE_FILES src/*.cpp)
+
+add_executable(yolo ${SOURCE_FILES})
+
+target_link_libraries( yolo ${OpenCV_LIBS} ${Eigen_LIBRARIES} ncnn -fopenmp)
 
