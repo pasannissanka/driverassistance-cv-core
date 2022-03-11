@@ -68,3 +68,5 @@ DartConfiguration.tcl
 
 ### build
 yolo
+chunks
+ncnn
