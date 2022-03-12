@@ -63,22 +63,22 @@ int main(int argc, char *argv[], char *envp[])
         cv::setTrackbarPos("Position", "test", current_pos);
 
         auto result = yolov4::detector->detect(image, 0.35, 0.7);
-        std::vector<cv::Rect> detections;
 
-        for (const auto &res : result)
-        {
-            detections.push_back(res.box);
-        }
-
-        tracker.Run(detections);
+        tracker.Run(result);
         const auto tracks = tracker.GetTracks();
 
-        for (auto rec : result)
-        {
-            cv::rectangle(image, rec.box, cv::Scalar(0, 255, 0), 2, 1);
-            std::string label = yolov4::detector->labels.at(rec.label) + " " + std::to_string(rec.score) + " %";
-            cv::putText(image, label, cv::Point(rec.box.x, rec.box.y), cv::FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(0, 255, 0), 1);
-        }
+        // for (auto rec : result)
+        // {
+        //     cv::rectangle(image, rec.box, cv::Scalar(0, 255, 0), 2, 1);
+        //     std::string label = yolov4::detector->labels.at(rec.label) + " " + std::to_string(rec.score) + " %";
+        //     cv::putText(image,
+        //                 label,
+        //                 cv::Point(rec.box.x, rec.box.y),
+        //                 cv::FONT_HERSHEY_DUPLEX,
+        //                 1.0,
+        //                 CV_RGB(0, 255, 0),
+        //                 1);
+        // }
 
         for (auto &trk : tracks)
         {
@@ -87,9 +87,15 @@ int main(int argc, char *argv[], char *envp[])
                 (trk.second.hit_streak_ >= kMinHits))
             {
                 const auto &bbox = trk.second.GetStateAsBbox();
-                cv::putText(image, std::to_string(trk.first), cv::Point(bbox.tl().x, bbox.tl().y - 10),
-                            cv::FONT_HERSHEY_DUPLEX, 2, cv::Scalar(255, 255, 255), 2);
-                // cv::rectangle(image, bbox, cv::Scalar(0, 255, 0), 3);
+                std::string label = std::to_string(trk.first) + " : " + yolov4::detector->labels.at(trk.second.label);
+                cv::putText(image,
+                            label,
+                            cv::Point(bbox.tl().x, bbox.tl().y - 10),
+                            cv::FONT_HERSHEY_DUPLEX,
+                            1.0,
+                            CV_RGB(0, 255, 0),
+                            1);
+                cv::rectangle(image, bbox, cv::Scalar(0, 255, 0), 2, 1);
             }
         }
 

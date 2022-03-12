@@ -41,7 +41,7 @@ yolov4::detect(const cv::Mat &_frame, float threshold, float nms_threshold)
 
     auto boxes = decode_infer(out, {(int)img_w, (int)img_h}, threshold);
     result.insert(result.begin(), boxes.begin(), boxes.end());
-    nms(result, nms_threshold);
+    // nms(result, nms_threshold);
     return result;
 }
 /**

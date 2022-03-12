@@ -15,7 +15,7 @@ find_package(Eigen3 REQUIRED)
 link_directories(${Eigen_INCLUDE_DIRS})
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(include/ncnn/include)
+include_directories(${PROJECT_SOURCE_DIR}/include/ncnn/include)
 
 add_library( ncnn STATIC IMPORTED )
 set_target_properties( # Specifies the target library.
